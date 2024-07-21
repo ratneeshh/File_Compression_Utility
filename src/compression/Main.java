@@ -1,14 +1,31 @@
 package compression;
 
+import java.io.FileWriter;
+import java.io.IOException;
+
 public class Main {
     public static void main(String[] args) {
-        String text = "this is an example for huffman encoding";
-        compression.HuffmanCompression huffmanCompression = new compression.HuffmanCompression(text);
+        // Read input from file
+        String inputText = compression.FileUtils.readFile("input.txt").trim(); // .trim() to remove extra newlines
 
-        String compressed = huffmanCompression.compress(text);
-        System.out.println("Compressed: " + compressed);
+        // Compress the text
+        String compressedData = compression.HuffmanCompression.compress(inputText);
 
-        String decompressed = huffmanCompression.decompress(compressed);
-        System.out.println("Decompressed: " + decompressed);
+        // Write compressed data to file
+        try (FileWriter writer = new FileWriter("compressed.txt")) {
+            writer.write(compressedData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Decompress the data
+        String decompressedData = compression.HuffmanCompression.decompress(compressedData);
+
+        // Write decompressed data to file
+        try (FileWriter writer = new FileWriter("decompressed.txt")) {
+            writer.write(decompressedData);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
